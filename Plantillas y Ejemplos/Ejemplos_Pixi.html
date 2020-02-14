@@ -1,23 +1,39 @@
 <html>
   <head>
+    //Esta es la inclusion o referencia a la libreria pixi.js
+    //Si la quieren descargar la pueden bajar de la pagina oficial prearmada en [https://github.com/pixijs/pixi.js/releases]
     <script src="https://pixijs.download/release/pixi.min.js"></script>
   </head>
   <body>
     <script>
+        //Esta es la declaracion y configuracion del lienzo o canvas. Pueden ajustarla a los parametros que les correspondan
+        //de acuerdo a su grupo de trabajo. Tengan en cuenta que el codigo de color en Hexadecimal debe tener antes el 0x.
+        //En esta pagina pueden encontrar los codigos que necesitan [https://htmlcolorcodes.com/es/]
         const app = new PIXI.Application({
         width: 800, height: 300, backgroundColor: 0x1099bb, resolution: window.devicePixelRatio || 1,
         });
         
+        //Esta linea de codigo incluye la "app"(ese nombre tiene en este ejemplo el lienzo) que crearon al cuerpo de su documento html.
         document.body.appendChild(app.view);
 
-
+        //Aca se entrega a la app la direccion de una imagen .png para usar como textura.
+        //Noten que la imagen esta guardada dentro del mismo repositorio del codigo. Ustedes pueden crear sus propios repositorios y 
+        //subir las imagenes que deseen para utilizar.
         const background_sprite = PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/background2.png');
+        
+        //Aca se crea un "Sprite" que usara la imagen cargada.
         const background = new PIXI.Sprite(background_sprite);
+        //Esta linea configura el punto de ancla o referencia del sprite. Ese punto es el que el codigo ubicara en la posicion x-y
         background.anchor.set(0.5);
+        
+        //En esta linea se ubica el punto y de ancla de nuestro sprite a la mitad de la altura de nuestro lienzo.
         background.y = app.screen.height/2;
+      
+        //Finalmente, se anade nuestro sprite al lienzo para que sea visible.
         app.stage.addChild(background);
 
 
+        //Otro ejemplo de como crear un sprite mas. En este caso tambien se especifico  la posicion x deseada.
         const texture = PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/G_face001.png');
         const face = new PIXI.Sprite(texture);
         
@@ -28,58 +44,89 @@
         app.stage.addChild(face);
 
 
-
+        //Como se desea que el sprite "face" gire, conviene especificar sobre que punto del sprite el va a girar.
+        //El punto de pivote x-y del sprite son de referencia con respecto a el mismo, es decir. En este caso como se puso a la mitad,
+        //El sprite dara vuetas sobre su propio centro al rotar. Estos puntos se pueden ajustar como se desee.
         face.pivot.x = face.width / 2;
         face.pivot.y = face.height / 2;
+      
+        //Esta es una variable auxiliar para usar de referencia a un elemento del arreglo smiles_frames.
         var a = 0;
+        //Este es un arreglo de texturas. No es mas que 4 texturas o imagenes diferentes guardadas en una sola variable por conveniencia.
         const smiles_frames = [
             PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/G_face000.png'),
             PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/G_face001.png'),
             PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/G_face002.png'),
             PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/G_face003.png'),
         ];
+        
+        //Noten que, en este caso, para poder asignar una imagen a nuestro sprite smiles se pasa el arreglo smiles_frames[]
+        //junto con el indice de referencia "a" que se declaro anteriormente.
+        //Ademas, cuando a vale 0 smiles usa la foto [G_face000.png] si valiese 3 usaria la foto G_face003.png
+        //Esto significa que la primera posicion del arreglo no es la posicion 1 sino la 0!!
+        //De la misma forma, aunque tenga 4 imagenes, la ultima estara en la posicion 3 o smiles_frames[3]
         smiles = new PIXI.Sprite(smiles_frames[a]);
 
+        //Se define el punto de ancla y posicion para nuestro sprite smiles.
         smiles.anchor.set(0.5);
         smiles.x = app.screen.width / 4;
         smiles.y = app.screen.height / 4;
 
         
-
+        //Se define el punto de pivote para smiles.
+        //Noten que el ancla y punto de pivote no necesariamente deben estar en el mismo lugar. Eso es opcional.
         smiles.pivot.x = smiles.width / 2;
         smiles.pivot.y = smiles.height / 2;
-
+        
+        //Se anade el sprite smiles al lienzo.
         app.stage.addChild(smiles);
-
+        
+        //Esta linea es muy importante. Ella se encargara de "mover" todo llamando la funcion [animar] con cada "tick" de tiempo que pase.
         app.ticker.add(animar);
-
+        
+        //Estas son variables auxiliares para usar en la funcion animar.
         let delta = 1;
         let dir = 1;
-
+        
+        //Aca se declara la funcion animar y se define lo que hace. Esto se ejecutara cada vez que app.ticker.add la llame.
         function animar () {
-           
+            
+            //Estas lineas se encargan de girar los sprites face y smiles respectivamente. 
+            //Cambiando los valores y signo pueden controlar la velocidad y direccion de giro.
             face.rotation += 0.03 * delta;
             smiles.rotation +=0.09 * delta;
+          
+            //Estos condicionales if-else se encargan de ir cambiando el valor de a para que la imagen del sprite smiles cambie 
+            //con cada "tick". fijense que el limite tope es a<=2 porque si esto se cumple a incrementa 1 y llega a 3. si se pone
+            //a<=3 el valor de a llegaria hasta 4 antes de resetearse !Pero esto seria una quinta foto en nuestro arreglo!
+            //Pueden ponerlo y probar como se ve la aplicacion cuando intenta mostrar una imagen que no esta.
             if (a<=2){
                 a+=1;
                 smiles.texture=smiles_frames[a];
-            }else{
+            }else{//este else se ejecuta cuando a se pasa de 2. Lo que hace es resetear la posicion a 0 y actualizar la foto.
                 a=0;
                 smiles.texture=smiles_frames[a];
             }
-
+            
+            //Estos condicionales revisan que el sprite [smiles] no se este pasando del borde superior o inferior de la app.
+            //Ademas se encargan de cambiar la posicion del sprite en el eje y.
+            
             if(smiles.y<(app.screen.height-smiles.height / 2)&&smiles.y>0+smiles.height/2){
                 smiles.y=smiles.y+dir;
-            }else{
+            }else{//Este else se ejecuta en caso que el sprite intente pasarse de la pantalla y cambia la direccion de signo.
                 dir = dir*-1;
-                smiles.y=smiles.y+dir;
+                smiles.y=smiles.y+dir;//De esta forma, como la direccion que estamos "sumando" a la posicion y del sprite cambia
+                                      //la direccion en que se mueve el sprite cambia tambien.
             }
-
+            
+            //Este primer if mueve el sprite que usamos de fondo hacia la izquierda (como si fuese el fondo de una juego sidescroller)
+            //(como el fondo del dinosaurio de chrome cuando no hay internet)
             if(background.x>(app.screen.width-background.width / 2)){
                 background.x=background.x-1;
-            }else{
-                background.x=screen.width/2;
-                background.x=background.x-1;
+            }else{//Sin embargo, como mi imagen de fondo se acaba, hay que revisar que no se pase. por eso tras cierta posicion x
+                background.x=screen.width/2;//(que puse probando) la posicion se resetea a la inicial.
+                background.x=background.x-1;//En este ejemplo, el cambio no es fluido y si dejan la app correr se daran cuenta como se ve.
+              //En un juego bien hecho, este cambio debe ser fluido de manera que no se note cuando se resetee o se cambie de fondo.
             }
 
 
