@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <script src="https://pixijs.download/release/pixi.min.js"></script>
+  </head>
+  <body>
+    <script>
+        const app = new PIXI.Application({
+        width: 800, height: 300, backgroundColor: 0x1099bb, resolution: window.devicePixelRatio || 1,
+        });
+        
+        document.body.appendChild(app.view);
+
+
+        const background_sprite = PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/background2.png');
+        const background = new PIXI.Sprite(background_sprite);
+        background.anchor.set(0.5);
+        background.y = app.screen.height/2;
+        app.stage.addChild(background);
+
+
+        const texture = PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/G_face001.png');
+        const face = new PIXI.Sprite(texture);
+        
+        face.anchor.set(0.5);
+        face.x = app.screen.width /2;
+        face.y = app.screen.height / 2;
+
+        app.stage.addChild(face);
+
+
+
+        face.pivot.x = face.width / 2;
+        face.pivot.y = face.height / 2;
+        var a = 0;
+        const smiles_frames = [
+            PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/G_face000.png'),
+            PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/G_face001.png'),
+            PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/G_face002.png'),
+            PIXI.Texture.from('https://raw.githubusercontent.com/clasenazaret/clase2020/master/Imagenes/G_face003.png'),
+        ];
+        smiles = new PIXI.Sprite(smiles_frames[a]);
+
+        smiles.anchor.set(0.5);
+        smiles.x = app.screen.width / 4;
+        smiles.y = app.screen.height / 4;
+
+        
+
+        smiles.pivot.x = smiles.width / 2;
+        smiles.pivot.y = smiles.height / 2;
+
+        app.stage.addChild(smiles);
+
+        app.ticker.add(animar);
+
+        let delta = 1;
+        let dir = 1;
+
+        function animar () {
+           
+            face.rotation += 0.03 * delta;
+            smiles.rotation +=0.09 * delta;
+            if (a<=2){
+                a+=1;
+                smiles.texture=smiles_frames[a];
+            }else{
+                a=0;
+                smiles.texture=smiles_frames[a];
+            }
+
+            if(smiles.y<(app.screen.height-smiles.height / 2)&&smiles.y>0+smiles.height/2){
+                smiles.y=smiles.y+dir;
+            }else{
+                dir = dir*-1;
+                smiles.y=smiles.y+dir;
+            }
+
+            if(background.x>(app.screen.width-background.width / 2)){
+                background.x=background.x-1;
+            }else{
+                background.x=screen.width/2;
+                background.x=background.x-1;
+            }
+
+
+
+
+
+
+        }
+
+    </script>
+  </body>
+</html>

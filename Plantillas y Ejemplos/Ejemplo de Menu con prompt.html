@@ -1,0 +1,85 @@
+<!doctype html>
+
+<title> 
+
+</title>
+
+<script>
+
+//Este ciclo while es el encargado de mostrar la ventana prompt de menu hasta que el usuario escoja la opcion 0 que pusimos como condicion de salida.
+while (input!= 0){
+    //Declaracion e Inicializacion de variables para el menu.
+    var resultado = 0;
+    input = "0";
+
+    //Prompt de Menu
+    var input = prompt("Menu\n0:Salir\n1:Sumar.\n2:Restar.\n3:Multiplicar.\n4:Dividir.\n5:Resto.");
+    
+    //Prompts para pedir los numeros a usar (Note que solo se ejecutan cuando no se escoge "0" que es la opcion de salir)
+    if (input!=0){
+        //Noten que los datos que el usuario da a la ventana prompt se guardan como texto.
+        //Para poder sumarlos como numero hace falta convertirlos a numero usando la funcion "Number()"
+        var a = Number(prompt("Primer valor."));   
+        var b = Number(prompt("Segundo valor."));
+        
+    }
+    
+    //Un switch solo ejecuta el codigo del caso que corresponda a la variable de la funcion.
+    switch (input){//En este ejemplo la variable de la funcion es input
+            
+            //Como input no se convirtio a numero, es necesario que en cada case se ponga entre comillas el valor de comparacion
+            //Si se ponen los numeros directamente la computadora no los considera iguales!!!!
+
+            case '1'://Si input es igual a 1 se ejecuta resultado = suma(a,b)
+                resultado = suma(a,b);
+            break;
+
+            case '2'://Si input es igual a 2 se ejecuta resultado = resta(a,b)
+                resultado = resta(a,b);
+            break;
+
+            case '3':
+                resultado = multiplicacion(a,b);
+            break;
+
+            case '4':
+                resultado = division(a,b);
+            break;
+
+            case '5':
+                resultado = resto(a,b);
+            break;
+
+    } 
+    //Este condicional solo s ejecuta cuando input no es la opcion de salir(o sea igual a 0)
+    if(input!=0){
+        alert("El resultado es " + resultado);//Esto abre una ventanita que muestra el texto que se ponga en ella.
+    }
+}
+
+//Estas son las funciones que el programa usa. Igualmente pueden hacer las funciones que deseen y reusarlas las veces que quieran.
+//No eran necesaias pues se podia poner directamente los calculos en el codigo pero les sirven de ejemplo.
+
+function suma(valor_1,valor_2) {
+  return valor_1 + valor_2;
+}
+function resta(valor_1,valor_2) {
+  return valor_1 - valor_2;
+}
+function multiplicacion(valor_1,valor_2) {
+  return valor_1 * valor_2;
+}
+function division(valor_1,valor_2) {
+  return valor_1 / valor_2;
+}
+function resto(valor_1,valor_2) {
+  return valor_1 % valor_2;
+}
+
+</script>
+
+<body>
+
+
+
+</body>
